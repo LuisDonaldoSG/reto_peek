@@ -8,12 +8,12 @@ const GUARDAR_ARTICULO = "GUARDAR_ARTICULO"
 
 export default function reducerArticulo (state = dataInicial , action) {
     switch (action.type) {
-        case GUARDAR_ARTICULO :
-            return [...state, {...action.payload}]
-        case EDITAR_ARTICULOS :
-            return [...action.payload]
+        case GUARDAR_ARTICULO : 
+            return [...state, {...action.payload}] //se insertan en el super arreglo los articulos nuevos
+        case EDITAR_ARTICULOS : 
+            return [...action.payload] //se insertan en el super arreglo los articulos actualizados
         case ELIMINAR_ARTICULO :
-            return [...action.payload]
+            return [...action.payload] //se insertan en el super arreglo los articulos actualizados solo con la baja logica
         default:
             return state
     }
@@ -22,7 +22,7 @@ export default function reducerArticulo (state = dataInicial , action) {
 //acciones de
 
 export const guardarArticulo = (articulo) => (dispatch) =>{
-    dispatch({
+    dispatch({ //inserción de datos al payload que se enviará al susper arreglo
         type: GUARDAR_ARTICULO,
         payload: {
             id: articulo.id,
@@ -37,7 +37,7 @@ export const guardarArticulo = (articulo) => (dispatch) =>{
 
 export const editarArticulo = (articulo) => (dispatch, getState) => {
 
-    let editado = getState().articulos.map(item => 
+    let editado = getState().articulos.map(item => //contruccion de los nuesvos datos
         articulo.id === item.id ? {
             id: articulo.id,
             nombre: articulo.nombre,
@@ -48,14 +48,14 @@ export const editarArticulo = (articulo) => (dispatch, getState) => {
         } : item
     )
 
-    dispatch({
+    dispatch({ //actualizacion de datos al payload que se enviará al susper arreglo
         type: EDITAR_ARTICULOS,
         payload: editado
     })
 }
 
 export const eliminarArticulo = (id) => (dispatch, getState) => {
-    let baja = getState().articulos.map(item => 
+    let baja = getState().articulos.map(item => //creando la baja logica, poninedo el atributo activo en false
         id === item.id ? {
             id: item.id,
             nombre: item.nombre,
@@ -66,7 +66,7 @@ export const eliminarArticulo = (id) => (dispatch, getState) => {
         } : item
     )
     dispatch({
-        type: ELIMINAR_ARTICULO,
+        type: ELIMINAR_ARTICULO, //actualizacion de datos al payload que se enviará al susper arreglo
         payload: baja
     })
 }

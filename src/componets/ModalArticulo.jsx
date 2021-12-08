@@ -15,37 +15,37 @@ import {nanoid} from 'nanoid'
 
 const ModalArticulo = (props) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch() //dispachador
 
+    //inicialización de estados
     const [mostrar, setMostrar] = React.useState(false)
     const [mensaje, setMensaje] = React.useState('')
-    
     const [nombre , setNombre] = React.useState('')
     const [costo,  setCosto] = React.useState('')
     const [precio, setPrecio] = React.useState(0.0)
     const [iva, setIva] = React.useState(0.16)
     const [guardar, setGuardar] = React.useState(false)
 
-    React.useEffect (() => {
+    React.useEffect (() => {//al momento de renderizar se verifica si hay datoa en el super arreglo
 
-        if (Object.keys(props.item).length > 0 ){
+        if (props.editar){ //al tener el props editar en true se capturan los datos del item seleccionado
             setNombre(props.item.nombre)
             setCosto(props.item.costo)
             setPrecio(props.item.precio)
         }
 
-    },[props.item.nombre, props.item.costo, props.item.precio, props.item])
+    },[props.item.nombre, props.item.costo, props.item.precio, props.editar])
 
-    const validar = () => {
+    const validar = () => {// validación de campos de texto tanto para editar y agregar
         
         if (!nombre.trim()){
-            setMostrar(true)
+            setMostrar(true) //se muestra el alert depenciendo el error
             setMensaje("El nombre no debe estar vacio")
             return
         }
 
         if (nombre.trim().length > 30) {
-            setMostrar(true)
+            setMostrar(true) //se muestra el alert depenciendo el error
             setMensaje("El tamaño maximo del nombre debe ser de 30")
             return
         }
@@ -53,7 +53,7 @@ const ModalArticulo = (props) => {
         let costoFloat = parseFloat(costo.trim())
 
         if (isNaN(costoFloat)){
-            setMostrar(true)
+            setMostrar(true) //se muestra el alert depenciendo el error
             setMensaje("solo puede escribir numeros enteros y numeros con decimales")
             return
         }
@@ -64,12 +64,12 @@ const ModalArticulo = (props) => {
         setGuardar(true)
     }
 
-    const guardarArti = () => {
+    const guardarArti = () => {// pasando las validaciones necesarias se manda a redux los datos para ser insertados en el super arreglo
 
         let precioFloat = parseFloat(precio)
 
         if (isNaN(precioFloat)){
-            setMostrar(true)
+            setMostrar(true) //se muestra el alert depenciendo el error
             setMensaje("solo puede escribir numeros enteros y numeros con decimales")
             return
         }
@@ -82,7 +82,7 @@ const ModalArticulo = (props) => {
             precio: precio}
         ))
 
-        setGuardar(false)
+        setGuardar(false) //limpiado de estados
         setNombre('')
         setCosto('')
         setIva(0.16)
@@ -90,12 +90,12 @@ const ModalArticulo = (props) => {
         props.handleClose()
     }
 
-    const editarArti = () => {
+    const editarArti = () => { // pasando las validaciones necesarias se manda a redux los datos para ser actualizados en el super arreglo
 
         let precioFloat = parseFloat(precio)
 
         if (isNaN(precioFloat)){
-            setMostrar(true)
+            setMostrar(true) //se muestra el alert depenciendo el error
             setMensaje("solo puede escribir numeros enteros y numeros con decimales")
             return
         }
@@ -109,7 +109,12 @@ const ModalArticulo = (props) => {
             activo: true
         }))
 
-        props.handleClose()
+        props.handleClose() //limpiado de estados
+        setNombre('')
+        setCosto('')
+        setIva(0.16)
+        setPrecio(0)
+        setGuardar(false)
     }
 
     return (
@@ -122,7 +127,7 @@ const ModalArticulo = (props) => {
                 <Box sx={styleModal}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         {
-                            props.editar ? 'Editar producto' : 'Agregar producto'
+                            props.editar ? 'Editar producto' : 'Agregar producto' //si la funcion es editar cambia el titulo
                         }
                     </Typography>
                     <TextField id="standard-basic" label="Nombre de producto" variant="standard" sx = {styleFormModal} onChange={event => setNombre(event.target.value)} value = {nombre}/>
@@ -143,10 +148,10 @@ const ModalArticulo = (props) => {
                             <Button 
                                 variant="contained" 
                                 color="success" 
-                                onClick = {props.editar ? editarArti : guardarArti}
+                                onClick = {props.editar ? editarArti : guardarArti} //si la funcion es editar cambia el metodo
                                 sx = {styleFormModal} >
                                 {
-                                    props.editar ? 'Editar' : 'Agregar'
+                                    props.editar ? 'Editar' : 'Agregar' //si la funcion es editar cambia el titulo
                                 }
                             </Button>)
                             }
@@ -160,7 +165,7 @@ const ModalArticulo = (props) => {
                         color="inherit"
                         size="small"
                         onClick={() => {
-                            setMostrar(false);
+                            setMostrar(false) 
                         }}
                         >
                         <CloseIcon fontSize="inherit" />

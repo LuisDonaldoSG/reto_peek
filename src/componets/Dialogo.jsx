@@ -10,9 +10,9 @@ import {useDispatch} from 'react-redux'
 
 export default function AlertDialog(props) {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch() //dispachador
 
-    const eliminar = () => {
+    const eliminar = () => { //metodo para mandar a redux la baja logica
         dispatch(eliminarArticulo(props.item.id))
         props.handleClose()
     }

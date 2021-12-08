@@ -10,17 +10,16 @@ import add from '../img/add.png';
 import Dialogo from '../componets/Dialogo'
 
 const ListarProductos = () => {
-
+    //Inicializacion de estados
     const [openModal, setOpenModal] = React.useState(false);
     const [openDialogo, setOpenDialogo] = React.useState(false);
-    const [renderModal, setRenderModar] = React.useState(false)
-    const articulos = useSelector(store => store.articulos)
-    const [item, setItem] = React.useState(null)
+    const articulos = useSelector(store => store.articulos) //arreglo original de los registros
+    const [item, setItem] = React.useState([])
     const [editable, setEditable] = React.useState(false)
     const [articulosActivos, setArticulosActivos] = React.useState([])
     const [nombreArticulo, setNombreArticulo] = React.useState('')
 
-    React.useEffect(() => {
+    React.useEffect(() => { //cuando re denderice el componente asigna registros a un arreglo temporal que serpá el que se pinte
         let arr = []
         articulos.map(item => item.activo && arr.push({
             id: item.id,
@@ -33,40 +32,39 @@ const ListarProductos = () => {
         setArticulosActivos(arr)
     },[setArticulosActivos, articulos])
 
-    const handleOpenModal = () => {
+    const handleOpenModal = () => { //metodo para abrir el modal
         setItem({})
         setOpenModal(true)
-        setRenderModar(true)
     }
-    const handleCloseModal = () => {
-        setOpenModal(false);
-        setRenderModar(false)
+
+    const handleCloseModal = () => { //metodo para abrir el modal
+        setOpenModal(false)
         setEditable(false)
     }
 
-    const handleOpenDialogo = () => {
+    const handleOpenDialogo = () => { //metodo para abrir el dialogo
         setOpenDialogo(true)
 
     }
-    const handleCloseDialogo = () => {
-        setOpenDialogo(false);
+
+    const handleCloseDialogo = () => { //metodo para cerrar el dialogo
+        setOpenDialogo(false)
     }
 
-    const enviarAEditar = ite => {
+    const enviarAEditar = ite => { //metodo que se ejecuta al dar click en el ícono de editar abriendo el modal, cambiando el estado editable a true y carturando valores de la filla en item 
         setItem(ite)
         setOpenModal(true)
-        setRenderModar(true)
         setEditable(true)
     }
 
-    const enviarAEliminar = ite => {
+    const enviarAEliminar = ite => { //metodo que se ejecuta al dar click en el ícono de eliminar abriendo el dialogo y carturando valores de la filla en item 
         setItem(ite)
         setNombreArticulo(ite.nombre)
         handleOpenDialogo()
     }
 
     return (
-        <div className="container mt-5 mb-5">
+        <div className="container mt-5 mb-5"> 
             <form className="form-control">
             <div className="row my-3">
                 <div className="col text-end">
@@ -78,12 +76,12 @@ const ListarProductos = () => {
             </div>
 
             {
-                articulosActivos.length === 0 ? (
+                articulosActivos.length === 0 ? ( //si el arreglo temporal no tiene nada se pinta una imagen
                     <div className="container mt-3">
                         <h6>Precione el botón "Agregar" para añadir nuevos productos</h6>
                         <img src={add} className="text-center" alt="Añadir" width="50%"/>
                     </div>
-                ) : (
+                ) : ( //si el arreglo temporal tiene datos los pinta
                     <div className="table-responsive mt-3">
                         <table className="table table-bordered dataTable">
 
@@ -99,7 +97,7 @@ const ListarProductos = () => {
                             <tbody>
                                 {
                                     articulos.map(item => (
-                                        item.activo === true ? (
+                                        item.activo === true ? ( //iteracion para llenar la tabla con los datos 
                                             <>
                                                 <tr key={item.id}>
                                                     <td>{item.nombre}</td>
@@ -132,9 +130,9 @@ const ListarProductos = () => {
 
 
             </form>
-            {
-                renderModal ? (<ModalArticulo open = {openModal} handleClose = {handleCloseModal} handleOpen = {handleOpenModal} item = {item} editar = {editable}/>) : null
-            }
+
+            <ModalArticulo open = {openModal} handleClose = {handleCloseModal} handleOpen = {handleOpenModal} item = {item} editar = {editable}/>
+
 
             <Dialogo open = {openDialogo} handleClose ={handleCloseDialogo} handleOpen ={handleOpenDialogo} nombre = {nombreArticulo} item = {item}/>
             
