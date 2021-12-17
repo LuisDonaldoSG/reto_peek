@@ -10,6 +10,8 @@ const styleModal = {
     borderRadius: 2
   };
 
+  
+
   const styleFormModal = {
     marginBottom: 2,
     width: '100%'
